@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-// import { ApolloWrapper } from "@/lib/ApolloWrapper";
+import { ApolloWrapper } from '@/lib/ApolloWrapper';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 
@@ -22,7 +22,9 @@ export default function RootLayout ( {
       {/* <body className={inter.className}><ApolloWrapper>{children}</ApolloWrapper></body> */}
       <body className={inter.className}>
         <Header />
-        {children}
+        <ApolloWrapper>
+          {children}
+        </ApolloWrapper>
         <Footer />
       </body>
 
