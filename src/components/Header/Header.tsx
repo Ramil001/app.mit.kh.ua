@@ -18,7 +18,7 @@ export default function Header () {
     <Box>
      <Link href="/checkout" >
       <IconButton edge="end" color="inherit">
-       <Badge badgeContent={4} color="success">
+       <Badge badgeContent={5} color="success">
         <ShoppingCartIcon />
        </Badge>
       </IconButton>

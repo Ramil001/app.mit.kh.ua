@@ -1,12 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Header from '@/components/Header/Header';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -19,15 +16,7 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-
-const Item = styled( Paper )( ( { theme } ) => ( {
- backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
- ...theme.typography.body2,
- padding: theme.spacing( 1 ),
- textAlign: 'center',
- color: theme.palette.text.secondary,
-} ) );
-
+// Пример данных для продуктов
 const products = [
  {
   name: 'Miracle Moisture Potion',
@@ -61,7 +50,6 @@ const products = [
  },
 ];
 
-
 const cities = [
  'London',
  'Birmingham',
@@ -76,6 +64,10 @@ const cities = [
 ];
 
 export default function Checkout () {
+ const handleDelete = ( index ) => {
+  console.log( 'Delete product at index:', index );
+ };
+
  return (
   <>
    <Header />
@@ -117,7 +109,6 @@ export default function Checkout () {
        <Grid item xs={12} lg={12}>
         <TextField fullWidth label="Address" variant="outlined" type="text" />
        </Grid>
-
        {/* Button buy */}
        <Grid item xs={12} lg={12}>
         <Button fullWidth color="primary" size="large" variant="outlined">Send order</Button>
@@ -149,12 +140,9 @@ export default function Checkout () {
           primary={product.name}
           secondary={
            <>
-            <Typography variant="body2" color="text.secondary">
-             {product.description}
-            </Typography>
-            <Typography variant="body1" color="text.primary">
-             {product.price} $
-            </Typography>
+            {product.description}
+            <br />
+            ${product.price.toFixed( 2 )}
            </>
           }
          />
@@ -165,6 +153,5 @@ export default function Checkout () {
     </Grid>
    </Box>
   </>
-
  );
 }
