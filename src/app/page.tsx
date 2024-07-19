@@ -12,7 +12,6 @@ import Grid from '@mui/material/Grid';
 export default function Home () {
   return (
     <>
-      <Header />
       <main className={styles.main}>
 
         <div className={styles.center}>
@@ -78,7 +77,6 @@ export default function Home () {
           </a>
         </div>
 
-        <Footer></Footer>
       </main>
     </>
   );

@@ -15,6 +15,7 @@ export default function Header () {
     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
      <Link href="/">Main page</Link>
     </Typography>
+
     <Box>
      <Link href="/checkout" >
       <IconButton edge="end" color="inherit">
@@ -23,7 +24,9 @@ export default function Header () {
        </Badge>
       </IconButton>
      </Link>
+
     </Box>
+
    </Toolbar>
   </AppBar>
  );
