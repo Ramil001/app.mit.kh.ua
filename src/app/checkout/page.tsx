@@ -15,6 +15,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Footer from '@/components/Footer/Footer';
+
 
 // Пример данных для продуктов
 const products = [
@@ -152,6 +154,7 @@ export default function Checkout () {
      </Grid>
     </Grid>
    </Box>
+   <Footer />
   </>
  );
 }

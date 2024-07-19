@@ -1,13 +1,24 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 export default function Footer () {
  return (
-  <>
-   Footer!
-  </>
- )
+  <Box
+   sx={{
+    backgroundColor: 'background.paper',
+    padding: 2,
+    textAlign: 'center',
+    borderTop: '1px solid',
+    borderColor: 'divider',
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+   }}
+  >
+   <Typography variant="body2" color="text.secondary">
+    © {new Date().getFullYear()} Footer.
+   </Typography>
+  </Box>
+ );
 }
