@@ -11,6 +11,13 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const Item = styled( Paper )( ( { theme } ) => ( {
@@ -20,6 +27,40 @@ const Item = styled( Paper )( ( { theme } ) => ( {
  textAlign: 'center',
  color: theme.palette.text.secondary,
 } ) );
+
+const products = [
+ {
+  name: 'Miracle Moisture Potion',
+  description: 'A magical serum that promises to make your skin feel like it just had a vacation.',
+  image: 'https://via.placeholder.com/150',
+  price: 35.00,
+ },
+ {
+  name: 'Glow-Up Face Mask',
+  description: 'A mask that turns your face from “meh” to “wow!” in just 10 minutes.',
+  image: 'https://via.placeholder.com/150',
+  price: 45.00,
+ },
+ {
+  name: 'Kiss Me Quick Lip Balm',
+  description: 'A lip balm so good, you’ll want to kiss yourself in the mirror.',
+  image: 'https://via.placeholder.com/150',
+  price: 12.00,
+ },
+ {
+  name: 'Wrinkle-Wizard Night Cream',
+  description: 'A cream that works its magic while you sleep, turning wrinkles into dreams.',
+  image: 'https://via.placeholder.com/150',
+  price: 60.00,
+ },
+ {
+  name: 'Spa Day in a Jar Scrub',
+  description: 'An exfoliating scrub that makes you feel like you just had a spa day without leaving your bathroom.',
+  image: 'https://via.placeholder.com/150',
+  price: 25.00,
+ },
+];
+
 
 const cities = [
  'London',
@@ -55,6 +96,9 @@ export default function Checkout () {
        <Grid item xs={12} lg={12}>
         <TextField fullWidth label="Number phone" variant="outlined" type="text" />
        </Grid>
+       <Grid item xs={12} lg={12}>
+        <TextField fullWidth label="Email" variant="outlined" type="text" />
+       </Grid>
        {/* Shipping info */}
        <Grid item xs={12} lg={12}>
         <Typography variant="h4" component="h2">
@@ -81,7 +125,42 @@ export default function Checkout () {
       </Grid>
      </Grid>
      <Grid item xs={12} lg={6}>
-      <Item>xs=4</Item>
+      <Typography variant="h4" component="h2">
+       Cart
+      </Typography>
+      <List>
+       {products.map( ( product, index ) => (
+        <ListItem
+         key={index}
+         secondaryAction={
+          <IconButton
+           edge="end"
+           color="error"
+           onClick={() => handleDelete( index )}
+          >
+           <DeleteIcon />
+          </IconButton>
+         }
+        >
+         <ListItemAvatar>
+          <Avatar src={product.image} alt={product.name} />
+         </ListItemAvatar>
+         <ListItemText
+          primary={product.name}
+          secondary={
+           <>
+            <Typography variant="body2" color="text.secondary">
+             {product.description}
+            </Typography>
+            <Typography variant="body1" color="text.primary">
+             {product.price} $
+            </Typography>
+           </>
+          }
+         />
+        </ListItem>
+       ) )}
+      </List>
      </Grid>
     </Grid>
    </Box>
