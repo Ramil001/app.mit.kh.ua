@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -14,41 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-
-// Пример данных для продуктов
-const products = [
- {
-  name: 'Miracle Moisture Potion',
-  description: 'A magical serum that promises to make your skin feel like it just had a vacation.',
-  image: 'https://via.placeholder.com/150',
-  price: 35.00,
- },
- {
-  name: 'Glow-Up Face Mask',
-  description: 'A mask that turns your face from “meh” to “wow!” in just 10 minutes.',
-  image: 'https://via.placeholder.com/150',
-  price: 45.00,
- },
- {
-  name: 'Kiss Me Quick Lip Balm',
-  description: 'A lip balm so good, you’ll want to kiss yourself in the mirror.',
-  image: 'https://via.placeholder.com/150',
-  price: 12.00,
- },
- {
-  name: 'Wrinkle-Wizard Night Cream',
-  description: 'A cream that works its magic while you sleep, turning wrinkles into dreams.',
-  image: 'https://via.placeholder.com/150',
-  price: 60.00,
- },
- {
-  name: 'Spa Day in a Jar Scrub',
-  description: 'An exfoliating scrub that makes you feel like you just had a spa day without leaving your bathroom.',
-  image: 'https://via.placeholder.com/150',
-  price: 25.00,
- },
-];
+import { GET_PRODUCTS, CREATE_ORDER, GET_ORDERS } from '@/lib/orders'; // Импорт новых запросов и мутаций
 
 const cities = [
  'London',
@@ -64,9 +31,46 @@ const cities = [
 ];
 
 export default function Checkout () {
+ const { loading: productsLoading, error: productsError, data: productsData } = useQuery( GET_PRODUCTS );
+ const { loading: ordersLoading, error: ordersError, data: ordersData } = useQuery( GET_ORDERS );
+ const [createOrder] = useMutation( CREATE_ORDER );
+ const [firstName, setFirstName] = React.useState( '' );
+ const [lastName, setLastName] = React.useState( '' );
+ const [phoneNumber, setPhoneNumber] = React.useState( '' );
+ const [email, setEmail] = React.useState( '' );
+ const [city, setCity] = React.useState( '' );
+ const [address, setAddress] = React.useState( '' );
+
+ const handleSubmit = async () => {
+  try {
+   const { data } = await createOrder( {
+    variables: {
+     input: {
+      firstName,
+      lastName,
+      phoneNumber,
+      email,
+      city,
+      address,
+     },
+    },
+   } );
+   console.log( 'Order created:', data );
+   // Очистите форму или перенаправьте пользователя
+  } catch ( error ) {
+   console.error( 'Error creating order:', error );
+  }
+ };
+
  const handleDelete = ( index ) => {
   console.log( 'Delete product at index:', index );
  };
+
+ if ( productsLoading ) return <p>Loading products...</p>;
+ if ( productsError ) return <p>Error loading products: {productsError.message}</p>;
+
+ if ( ordersLoading ) return <p>Loading orders...</p>;
+ if ( ordersError ) return <p>Error loading orders: {ordersError.message}</p>;
 
  return (
   <>
@@ -79,16 +83,44 @@ export default function Checkout () {
       </Typography>
       <Grid container spacing={2}>
        <Grid item xs={12} lg={6}>
-        <TextField fullWidth label="First name" variant="outlined" type="text" />
+        <TextField
+         fullWidth
+         label="First name"
+         variant="outlined"
+         type="text"
+         value={firstName}
+         onChange={( e ) => setFirstName( e.target.value )}
+        />
        </Grid>
        <Grid item xs={12} lg={6}>
-        <TextField fullWidth label="Last name" variant="outlined" type="text" />
+        <TextField
+         fullWidth
+         label="Last name"
+         variant="outlined"
+         type="text"
+         value={lastName}
+         onChange={( e ) => setLastName( e.target.value )}
+        />
        </Grid>
        <Grid item xs={12} lg={12}>
-        <TextField fullWidth label="Number phone" variant="outlined" type="text" />
+        <TextField
+         fullWidth
+         label="Phone number"
+         variant="outlined"
+         type="text"
+         value={phoneNumber}
+         onChange={( e ) => setPhoneNumber( e.target.value )}
+        />
        </Grid>
        <Grid item xs={12} lg={12}>
-        <TextField fullWidth label="Email" variant="outlined" type="text" />
+        <TextField
+         fullWidth
+         label="Email"
+         variant="outlined"
+         type="text"
+         value={email}
+         onChange={( e ) => setEmail( e.target.value )}
+        />
        </Grid>
        {/* Shipping info */}
        <Grid item xs={12} lg={12}>
@@ -101,16 +133,37 @@ export default function Checkout () {
          options={cities}
          getOptionLabel={( option ) => option}
          renderInput={( params ) => (
-          <TextField {...params} label="City" variant="outlined" />
+          <TextField
+           {...params}
+           label="City"
+           variant="outlined"
+           value={city}
+           onChange={( e ) => setCity( e.target.value )}
+          />
          )}
         />
        </Grid>
        <Grid item xs={12} lg={12}>
-        <TextField fullWidth label="Address" variant="outlined" type="text" />
+        <TextField
+         fullWidth
+         label="Address"
+         variant="outlined"
+         type="text"
+         value={address}
+         onChange={( e ) => setAddress( e.target.value )}
+        />
        </Grid>
        {/* Button buy */}
        <Grid item xs={12} lg={12}>
-        <Button fullWidth color="primary" size="large" variant="outlined">Send order</Button>
+        <Button
+         fullWidth
+         color="primary"
+         size="large"
+         variant="outlined"
+         onClick={handleSubmit}
+        >
+         Send order
+        </Button>
        </Grid>
       </Grid>
      </Grid>
@@ -119,7 +172,7 @@ export default function Checkout () {
        Cart
       </Typography>
       <List>
-       {products.map( ( product, index ) => (
+       {productsData.products.map( ( product, index ) => (
         <ListItem
          key={index}
          secondaryAction={
@@ -142,6 +195,31 @@ export default function Checkout () {
             {product.description}
             <br />
             ${product.price.toFixed( 2 )}
+           </>
+          }
+         />
+        </ListItem>
+       ) )}
+      </List>
+      <Typography variant="h4" component="h2">
+       Orders
+      </Typography>
+      <List>
+       {ordersData.orders.map( ( order, index ) => (
+        <ListItem key={index}>
+         <ListItemText
+          primary={`Order #${ order.id }`}
+          secondary={
+           <>
+            {order.firstName} {order.lastName}
+            <br />
+            {order.phoneNumber}
+            <br />
+            {order.email}
+            <br />
+            {order.city}
+            <br />
+            {order.address}
            </>
           }
          />
