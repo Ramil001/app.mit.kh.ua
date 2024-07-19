@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 export default function Header () {
  return (
-  <AppBar position="static">
+  <AppBar color="info" position="static">
    <Toolbar>
     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
      <Link href="/">Main page</Link>
@@ -18,7 +18,7 @@ export default function Header () {
     <Box>
      <Link href="/checkout" >
       <IconButton edge="end" color="inherit">
-       <Badge badgeContent={4} color="secondary">
+       <Badge badgeContent={4} color="success">
         <ShoppingCartIcon />
        </Badge>
       </IconButton>
