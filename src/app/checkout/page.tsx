@@ -17,6 +17,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Products from '@/components/Checkout/Products'
 import Orders from '@/components/Checkout/Orders'
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+
 
 import { GET_PRODUCTS, CREATE_ORDER, GET_ORDERS } from '@/lib/orders';
 
@@ -36,6 +38,11 @@ const cities = [
  'Edinburgh',
 ];
 
+
+interface State extends SnackbarOrigin {
+ open: boolean;
+}
+
 export default function Checkout () {
  const [createOrder] = useMutation( CREATE_ORDER );
  const [firstName, setFirstName] = React.useState( '' );
@@ -44,8 +51,18 @@ export default function Checkout () {
  const [email, setEmail] = React.useState( '' );
  const [city, setCity] = React.useState( '' );
  const [address, setAddress] = React.useState( '' );
+ const [open, setOpen] = useState( false );
+ const [message, setMessage] = useState( '' );
+ const [severity, setSeverity] = useState( 'success' );
 
 
+ const handleClick = ( newState: SnackbarOrigin ) => () => {
+  setState( { ...newState, open: true } );
+ };
+
+ const handleClose = () => {
+  setState( { ...state, open: false } );
+ };
 
  const handleSubmit = async () => {
   try {
@@ -62,9 +79,14 @@ export default function Checkout () {
     },
    } );
    console.log( 'Order created:', data );
-   // Clear the form or redirect user
+   setMessage( 'Order created successfully' );
+   setSeverity( 'success' );
+   setOpen( true );
   } catch ( error ) {
    console.error( 'Error creating order:', error );
+   setMessage( 'Error creating order' );
+   setSeverity( 'error' );
+   setOpen( true );
   }
  };
 
@@ -156,7 +178,10 @@ export default function Checkout () {
         color="primary"
         size="large"
         variant="outlined"
-        onClick={handleSubmit}
+        onClick={() => {
+         handleSubmit();
+         handleClick( { vertical: 'bottom', horizontal: 'center' } )();
+        }}
        >
         Send order
        </Button>
@@ -174,7 +199,16 @@ export default function Checkout () {
      <Orders />
     </Grid>
    </Grid>
+   <Snackbar
+    anchorOrigin={{ vertical, horizontal }}
+    open={open}
+    onClose={handleClose}
+    message="I love snacks"
+    key={vertical + horizontal}
+   />
   </Box>
  );
+
+
 }
 
